@@ -31,20 +31,45 @@
         <form action="{{ url_for('auth.register') }}" method="post">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                <label for="email">Email:</label>
+                {{ form.password.label("Email:") }}
                 {{ form.email(class="form-control", placeholder="Введите email") }}
+                {% if form.email.errors %}
+                    <ul>
+                    {% for error in form.email.errors %}
+                        <li>
+                            {{ error }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+
+
             </div>
             <div class="form-group">
-                <label for="password">Пароль:</label>
+                {{ form.password.label("Пароль:") }}
                 {{ form.password(class="form-control", placeholder="Введите пароль") }}
             </div>
             <div class="form-group">
-                <label for="confirm_password">Подтвердите пароль:</label>
+                {{ form.password.label("Подтвердите пароль:") }}
                 {{ form.confirm_password(class="form-control", placeholder="Подтвердите пароль") }}
             </div>
             <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
         </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                Swal.fire({
+                    icon: '{{ category }}',
+                    title: '{{ message }}',
+                    showConfirmButton: true,
+                });
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>

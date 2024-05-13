@@ -9,27 +9,51 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Главная</a>
+            <a class="navbar-brand" href="{{ url_for('auth.index') }}">Главная</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth.login') }}">Логин</a>
-                    </li>
+                    {% if not user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth.register') }}">Регистрация</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">Выйти из аккаунта</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container my-5">
-        <h1>Добро пожаловать на главную страницу!</h1>
-        <p>Это пример главной страницы с навбаром, который содержит ссылки на страницы логина и регистрации.</p>
-    </div>
+    {% if user %}
+        {% if message %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    Swal.fire({
+                        icon: '{{ category }}',
+                        title: '{{ message }}',
+                        showConfirmButton: true,
+                    });
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </script>
+
+    <h1>Добро пожаловать на главную страницу!</h1>
+    <p>Это пример главной страницы с навбаром, который содержит ссылки на страницы логина и регистрации.</p>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
